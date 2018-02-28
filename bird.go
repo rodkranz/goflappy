@@ -4,14 +4,27 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 	"fmt"
 	"github.com/veandco/go-sdl2/img"
+	"sync"
 )
 
-type Bird struct {
+const (
+	gravity   = 0.2
+	jumpSpeed = 5
+)
+
+type bird struct {
+	mu sync.RWMutex
+	
 	time     int
 	textures []*sdl.Texture
+	
+	x, y  int32
+	h, w  int32
+	speed float64
+	dead  bool
 }
 
-func NewBird(r *sdl.Renderer) (*Bird, error) {
+func NewBird(r *sdl.Renderer) (*bird, error) {
 	var textures []*sdl.Texture
 	for i := 1; i <= 4; i++ {
 		path := fmt.Sprintf("./res/imgs/birds/player%d.png", i)
@@ -22,13 +35,48 @@ func NewBird(r *sdl.Renderer) (*Bird, error) {
 		textures = append(textures, texture)
 	}
 	
-	return &Bird{textures: textures}, nil
+	return &bird{
+		textures: textures,
+		x:        10,
+		y:        300,
+		w:        50,
+		h:        43,
+	}, nil
 }
 
-func (b *Bird) paint(r *sdl.Renderer) error {
-	b.time++
+func (b *bird) update() {
+	b.mu.Lock()
+	defer b.mu.Unlock()
 	
-	rect := &sdl.Rect{X: 10, Y: 300 - 43/2, W: 50, H: 43}
+	b.time++
+	b.y -= int32(b.speed)
+	if b.y < 0 {
+		b.dead = true
+	}
+	b.speed += gravity
+}
+
+func (b *bird) restart() {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	
+	b.y = 300
+	b.speed = 0
+	b.dead = false
+}
+
+func (b *bird) isDead() bool {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	
+	return b.dead
+}
+
+func (b *bird) paint(r *sdl.Renderer) error {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	
+	rect := &sdl.Rect{X: b.x, Y: 600 - int32(b.y) - b.h/2, W: b.w, H: b.h}
 	
 	i := b.time / 10 % len(b.textures)
 	if err := r.Copy(b.textures[i], nil, rect); err != nil {
@@ -38,8 +86,40 @@ func (b *Bird) paint(r *sdl.Renderer) error {
 	return nil
 }
 
-func (b *Bird) destroy() {
+func (b *bird) jump() {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	
+	b.speed = -jumpSpeed
+}
+
+func (b *bird) destroy() {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	
 	for _, t := range b.textures {
 		t.Destroy()
 	}
+}
+
+func (b *bird) touch(p *pipe) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	
+	// too far right
+	if p.x > b.x+b.w {
+		return
+	}
+	// too far left
+	if p.x+p.w < b.x {
+		return
+	}
+	// Pipe is too low
+	if p.h < b.y-(b.h/2) {
+		return
+	}
+	
+	b.dead = true
 }
