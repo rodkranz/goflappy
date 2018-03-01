@@ -1,21 +1,21 @@
 package game
 
 import (
-	"sync"
-	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/img"
 	"fmt"
+	"github.com/veandco/go-sdl2/img"
+	"github.com/veandco/go-sdl2/sdl"
+	"sync"
 	"time"
 )
 
 type pipes struct {
 	mu sync.RWMutex
-	
+
 	texture *sdl.Texture
 	speed   int32
-	
+
 	pipes []*pipe
-	
+
 	count int
 }
 
@@ -28,7 +28,7 @@ func newPipes(r *sdl.Renderer) (*pipes, error) {
 		texture: texture,
 		speed:   2,
 	}
-	
+
 	go func() {
 		for {
 			ps.mu.Lock()
@@ -38,35 +38,36 @@ func newPipes(r *sdl.Renderer) (*pipes, error) {
 			time.Sleep(1500 * time.Millisecond)
 		}
 	}()
-	
+
 	return ps, nil
 }
 
 func (ps *pipes) paint(r *sdl.Renderer) error {
 	ps.mu.RLock()
 	defer ps.mu.RUnlock()
-	
+
 	for _, p := range ps.pipes {
 		err := p.paint(r, ps.texture)
 		if err != nil {
 			return err
 		}
 	}
-	
+
 	return nil
 }
 
 func (ps *pipes) restart() {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
-	
+
 	ps.pipes = nil
+	ps.count = 0
 }
 
 func (ps *pipes) touch(b *bird) {
 	ps.mu.RLock()
 	defer ps.mu.RUnlock()
-	
+
 	for _, p := range ps.pipes {
 		p.touch(b)
 	}
@@ -75,7 +76,7 @@ func (ps *pipes) touch(b *bird) {
 func (ps *pipes) update() {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
-	
+
 	var ram []*pipe
 	for _, p := range ps.pipes {
 		p.setSpeed(ps.speed)
@@ -85,13 +86,13 @@ func (ps *pipes) update() {
 			ps.count++
 		}
 	}
-	
+
 	ps.pipes = ram
 }
 
 func (ps *pipes) destroy() {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
-	
+
 	ps.texture.Destroy()
 }

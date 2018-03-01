@@ -1,9 +1,9 @@
 package game
 
 import (
-	"github.com/veandco/go-sdl2/sdl"
 	"fmt"
 	"github.com/veandco/go-sdl2/img"
+	"github.com/veandco/go-sdl2/sdl"
 	"sync"
 )
 
@@ -24,7 +24,7 @@ type bird struct {
 	dead  bool
 }
 
-func NewBird(r *sdl.Renderer) (*bird, error) {
+func newBird(r *sdl.Renderer) (*bird, error) {
 	var textures []*sdl.Texture
 	for i := 1; i <= 4; i++ {
 		path := fmt.Sprintf("./res/imgs/birds/player%d.png", i)

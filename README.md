@@ -5,8 +5,9 @@ Game made in Golang to learn little bit more about concurrency, goroutine, data-
 ### Requirements
 
  * [GoLang 1.9+](https://golang.org/dl/#stable) - S2
- * [Dep](https://github.com/golang/dep) - dep is a prototype dependency management tool for Go.
  * [Go-SDL2](https://github.com/veandco/go-sdl2/) - go-sdl2 is SDL2 wrapped for Go users.
+ * [Dep](https://github.com/golang/dep) - Dep is a prototype dependency management tool for Go.
+ * [Bra](https://github.com/Unknwon/bra) - Brilliant Ridiculous Assistant
  
 ### Instalation 
 
@@ -20,13 +21,16 @@ Game made in Golang to learn little bit more about concurrency, goroutine, data-
 
 ### Build
 
-    $ go build -o flappy  main.go
+    $ go build -o flappy main.go
   
 ### Execute
   
     $ ./flappy
   
+### Development
 
+    $ bra run
+  
 ### ScreenShots
 
 ![Started Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-0.png "GamePlay 1")

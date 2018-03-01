@@ -4,17 +4,10 @@ import (
 	"fmt"
 	"time"
 	
-	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/img"
+	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
-
-type Object interface {
-	paint(*sdl.Renderer) error
-	restart()
-	update()
-	destroy()
-}
 
 type scene struct {
 	bg    *sdl.Texture
@@ -32,7 +25,7 @@ func newScene(r *sdl.Renderer) (*scene, error) {
 		return nil, fmt.Errorf("could not load background image: %v", err)
 	}
 	
-	b, err := NewBird(r)
+	b, err := newBird(r)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +93,7 @@ func (s *scene) handleEvent(event sdl.Event) bool {
 func (s *scene) restart() {
 	s.bird.restart()
 	s.pipes.restart()
+	s.panel.restart()
 }
 
 func (s *scene) update() {
