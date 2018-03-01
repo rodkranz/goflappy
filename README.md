@@ -10,7 +10,7 @@ Game made in Golang to learn little bit more about concurrency, goroutine, data-
  
 ### Instalation 
 
- `go get github.com/rodkranz/goflappy`
+    $ go get github.com/rodkranz/goflappy
  
 ### Documents 
 
