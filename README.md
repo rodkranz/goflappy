@@ -29,7 +29,7 @@ Game made in Golang to learn little bit more about concurrency, goroutine, data-
 
 ### ScreenShots
 
-![Started Game](github.com/rodkranz/goflappy/blob/master/res/ss/game-0.png "GamePlay 1")
-![Playing Game](github.com/rodkranz/goflappy/blob/master/res/ss/game-1.png "GamePlay 2")
-![Ended Game](github.com/rodkranz/goflappy/blob/master/res/ss/game-2.png "GamePlay 3")
+![Started Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-0.png "GamePlay 1")
+![Playing Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-1.png "GamePlay 2")
+![Ended Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-2.png "GamePlay 3")
     
