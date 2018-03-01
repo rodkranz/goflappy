@@ -105,8 +105,6 @@ func (b *bird) destroy() {
 func (b *bird) touch(p *pipe) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	p.mu.RLock()
-	defer p.mu.RUnlock()
 	
 	// too far right
 	if p.x > b.x+b.w {
@@ -116,8 +114,14 @@ func (b *bird) touch(p *pipe) {
 	if p.x+p.w < b.x {
 		return
 	}
-	// Pipe is too low
-	if p.h < b.y-(b.h/2) {
+	
+	// pipes is too low
+	if !p.inverted && p.h < b.y-(b.h/2) {
+		return
+	}
+	
+	// pipes is too high
+	if p.inverted && 600-p.h > b.y+b.h/2 {
 		return
 	}
 	
