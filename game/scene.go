@@ -1,4 +1,4 @@
-package main
+package game
 
 import (
 	"fmt"
@@ -42,7 +42,7 @@ func newScene(r *sdl.Renderer) (*scene, error) {
 		return nil, err
 	}
 	
-	pp, err := newPanelPoint(r)
+	pp, err := newPanelPoint()
 	if err != nil {
 		return nil, err
 	}

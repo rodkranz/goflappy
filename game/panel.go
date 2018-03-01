@@ -1,9 +1,10 @@
-package main
+package game
 
 import (
+	"fmt"
+	
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"fmt"
 )
 
 type panelPoint struct {
@@ -13,7 +14,7 @@ type panelPoint struct {
 	points int
 }
 
-func newPanelPoint(r *sdl.Renderer) (_ *panelPoint, err error) {
+func newPanelPoint() (_ *panelPoint, err error) {
 	pp := &panelPoint{}
 	
 	pp.f, err = ttf.OpenFont("./res/fonts/FiraCode.ttf", 20)
@@ -21,7 +22,7 @@ func newPanelPoint(r *sdl.Renderer) (_ *panelPoint, err error) {
 		return nil, fmt.Errorf("could not load font: %v", err)
 	}
 	
-	pp.c = sdl.Color{R: 255, G: 100, B: 0, A: 255}
+	pp.c = sdl.Color{R: 0, G: 0, B: 0, A: 0}
 	return pp, nil
 }
 
