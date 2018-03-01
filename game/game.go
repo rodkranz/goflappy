@@ -29,7 +29,7 @@ func Run() error {
 	if err := drawTitle(r, "Flappy bird"); err != nil {
 		return fmt.Errorf("could not draw title: %v", err)
 	}
-	time.Sleep(1500 * time.Millisecond)
+	time.Sleep(3000 * time.Millisecond)
 	
 	s, err := newScene(r)
 	if err != nil {
