@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"time"
-	"log"
 	
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/img"
@@ -21,6 +20,10 @@ type scene struct {
 	bg    *sdl.Texture
 	bird  *bird
 	pipes *pipes
+	
+	panel *panelPoint
+	
+	points int
 }
 
 func newScene(r *sdl.Renderer) (*scene, error) {
@@ -39,10 +42,16 @@ func newScene(r *sdl.Renderer) (*scene, error) {
 		return nil, err
 	}
 	
+	pp, err := newPanelPoint(r)
+	if err != nil {
+		return nil, err
+	}
+	
 	return &scene{
 		bg:    bg,
 		bird:  b,
 		pipes: ps,
+		panel: pp,
 	}, nil
 }
 
@@ -83,9 +92,6 @@ func (s *scene) handleEvent(event sdl.Event) bool {
 		return true
 	case *sdl.MouseButtonEvent:
 		s.bird.jump()
-	case *sdl.TouchFingerEvent, *sdl.WindowEvent, *sdl.CommonEvent, *sdl.MouseMotionEvent:
-	default:
-		log.Printf("unknown event %T", event)
 	}
 	
 	return false
@@ -100,6 +106,7 @@ func (s *scene) update() {
 	s.bird.update()
 	s.pipes.update()
 	s.pipes.touch(s.bird)
+	s.panel.count(s.pipes)
 }
 
 func (s *scene) paint(r *sdl.Renderer) error {
@@ -115,6 +122,10 @@ func (s *scene) paint(r *sdl.Renderer) error {
 		return err
 	}
 	
+	if err := s.panel.paint(r); err != nil {
+		return err
+	}
+	
 	r.Present()
 	return nil
 }
@@ -123,6 +134,7 @@ func (s *scene) destroy() {
 	s.bg.Destroy()
 	s.bird.destroy()
 	s.pipes.destroy()
+	s.panel.destroy()
 }
 
 func drawTitle(r *sdl.Renderer, text string) error {

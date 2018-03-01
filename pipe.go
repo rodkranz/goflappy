@@ -17,6 +17,8 @@ type pipes struct {
 	speed   int32
 	
 	pipes []*pipe
+	
+	count int
 }
 
 func newPipes(r *sdl.Renderer) (*pipes, error) {
@@ -33,6 +35,7 @@ func newPipes(r *sdl.Renderer) (*pipes, error) {
 		for {
 			ps.mu.Lock()
 			ps.pipes = append(ps.pipes, newPipe())
+			//ps.count++
 			ps.mu.Unlock()
 			time.Sleep(1500 * time.Millisecond)
 		}
@@ -76,13 +79,15 @@ func (ps *pipes) update() {
 	defer ps.mu.Unlock()
 	
 	var ram []*pipe
-	
 	for _, p := range ps.pipes {
 		p.setSpeed(ps.speed)
 		if p.x+p.w > 0 {
 			ram = append(ram, p)
+		} else {
+			ps.count++
 		}
 	}
+	
 	ps.pipes = ram
 }
 
