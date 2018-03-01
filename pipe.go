@@ -33,8 +33,8 @@ func newPipes(r *sdl.Renderer) (*pipes, error) {
 		for {
 			ps.mu.Lock()
 			ps.pipes = append(ps.pipes, newPipe())
-			ps.mu.Lock()
-			time.Sleep(time.Second)
+			ps.mu.Unlock()
+			time.Sleep(1500 * time.Millisecond)
 		}
 	}()
 	
@@ -75,9 +75,15 @@ func (ps *pipes) update() {
 	ps.mu.Lock()
 	defer ps.mu.Unlock()
 	
+	var ram []*pipe
+	
 	for _, p := range ps.pipes {
 		p.setSpeed(ps.speed)
+		if p.x+p.w > 0 {
+			ram = append(ram, p)
+		}
 	}
+	ps.pipes = ram
 }
 
 func (ps *pipes) destroy() {
