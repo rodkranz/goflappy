@@ -62,7 +62,7 @@ func (pp *panelPoint) paint(r *sdl.Renderer) error {
 	}
 	defer t.Destroy()
 
-	rect := &sdl.Rect{X: 10, Y: 10, W: 100, H: 30}
+	rect := &sdl.Rect{X: 10, Y: 10, W: 300, H: 50}
 	if err := r.CopyEx(t, nil, rect, 0, nil, sdl.FLIP_NONE); err != nil {
 		return fmt.Errorf("could not copy pipes: %v", err)
 	}
