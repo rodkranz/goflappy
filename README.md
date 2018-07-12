@@ -37,3 +37,11 @@ Game made in Golang to learn little bit more about concurrency, goroutine, data-
 ![Playing Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-1.png "GamePlay 2")
 ![Ended Game](https://github.com/rodkranz/goflappy/blob/master/res/ss/game-2.png "GamePlay 3")
     
+### Credits 
+
+ Just For Func: 
+  https://www.youtube.com/watch?v=aYkxFbd6luY
+  https://www.youtube.com/watch?v=tX_Fgt0gVbQ&t=1815s
+  https://www.youtube.com/watch?v=jy9XKfYjtwE
+    
+    
